@@ -14,13 +14,28 @@ cnv.height = 600;
 // Animation Variables
 let TreeColor = "darkgreen";
 let keyPhrase = "";
+let landScape = "green";
+let stopLight = "darkred";
+let slowLight = `rgb(102, 90, 9)`;
+let goLight = "darkgreen";
+let frame = 0;
+let carRed = 270;
+let carRedx = 280;
+let carBlue = 270;
+let carBluex = 280;
+let carGreen = 270;
+let carGreenx = 280;
+let carRedy = 100;
+let carRedxy = 100;
 
 requestAnimationFrame(draw);
 
 function draw() {
   // ground
-  ctx.fillStyle = "green";
+  ctx.fillStyle = landScape;
   ctx.fillRect(0, 0, 600, 600);
+
+  frame++;
 
   // Race Track
   ctx.strokeStyle = "black";
@@ -45,28 +60,28 @@ function draw() {
   ctx.strokeStyle = "red";
   ctx.lineWidth = 7;
   ctx.beginPath();
-  ctx.moveTo(270, 100);
-  ctx.lineTo(285, 100);
+  ctx.moveTo(carRed, carRedy);
+  ctx.lineTo(carRedx, carRedxy);
   ctx.stroke();
 
   // Blue car
   ctx.strokeStyle = "blue";
   ctx.lineWidth = 7;
   ctx.beginPath();
-  ctx.moveTo(270, 110);
-  ctx.lineTo(285, 110);
+  ctx.moveTo(carBlue, 110);
+  ctx.lineTo(carBluex, 110);
   ctx.stroke();
 
   // Green car
   ctx.strokeStyle = "green";
   ctx.lineWidth = 7;
   ctx.beginPath();
-  ctx.moveTo(270, 90);
-  ctx.lineTo(285, 90);
+  ctx.moveTo(carGreen, 90);
+  ctx.lineTo(carGreenx, 90);
   ctx.stroke();
 
   // Count Down backdrop
-  ctx.fillStyle = "grey";
+  ctx.fillStyle = "black";
   ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.moveTo(200, 0);
@@ -77,25 +92,25 @@ function draw() {
   ctx.fill();
 
   // Red light
-  ctx.fillStyle = "darkred";
+  ctx.fillStyle = stopLight;
   ctx.beginPath();
   ctx.arc(230, 25, 20, 0, 2 * Math.PI);
   ctx.fill();
 
   // Yellow light
-  ctx.fillStyle = "yellow";
+  ctx.fillStyle = slowLight;
   ctx.beginPath();
   ctx.arc(275, 25, 20, 0, 2 * Math.PI);
   ctx.fill();
 
   // Green light
-  ctx.fillStyle = "darkgreen";
+  ctx.fillStyle = goLight;
   ctx.beginPath();
   ctx.arc(320, 25, 20, 0, 2 * Math.PI);
   ctx.fill();
 
   // Parking Lot
-  ctx.fillStyle = "grey";
+  ctx.fillStyle = "black";
   ctx.beginPath();
   ctx.moveTo(115, 300);
   ctx.lineTo(115, 350);
@@ -331,6 +346,34 @@ function draw() {
   ctx.lineTo(575, 240);
   ctx.lineTo(560, 210);
   ctx.fill();
+
+  // Animation
+  carRed = carRed - 1;
+  carRedx = carRedx - 1;
+  carRedy = carRedy + 0;
+  carRedxy = carRedxy + 0;
+
+  if (carRed >= 100) {
+    carRedy + 1;
+    carRed - 1;
+  } else if (carRedx >= 100) {
+    carRedxy + 1;
+    carRedx - 1;
+  }
+
+  if (frame == 100) {
+    stopLight = "red";
+  } else if (frame == 200) {
+    slowLight = "yellow";
+    stopLight = "darkred";
+  } else if (frame == 300) {
+    goLight = "lightgreen";
+    slowLight = `rgb(102, 90, 9)`;
+  } else if (frame == 5000) {
+    frame = 0;
+    goLight = "darkgreen";
+  }
+  requestAnimationFrame(draw);
 }
 
 // Keyboard Handler
@@ -339,7 +382,19 @@ document.addEventListener("keypress", keyboardHandler);
 function keyboardHandler(event) {
   keyPhrase = keyPhrase + event.key;
   console.log(keyPhrase);
-  if (keyPhrase == "winter") {
+  if (event.key == "z") {
+    keyPhrase = "";
+  } else if (keyPhrase == "winter") {
     TreeColor = "white";
+    landScape = "grey";
+  } else if (keyPhrase == "fall") {
+    TreeColor = "orangered";
+    landScape = "orange";
+  } else if (keyPhrase == "summer") {
+    TreeColor = `rgb(118, 224, 96)`;
+    landScape = `rgb(54, 232, 19)`;
+  } else if (keyPhrase == "spring") {
+    TreeColor = "darkgreen";
+    landScape = "green";
   }
 }
